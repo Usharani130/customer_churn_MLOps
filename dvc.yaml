@@ -1,0 +1,37 @@
+# YAML config placeholder
+stages:
+  preprocess:
+    cmd: python -m src.data.preprocess
+    deps:
+      - data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv
+      - src/data/preprocess.py
+    params:
+      - config/params.yaml:
+          - base.random_state
+          - data_split.test_size
+    outs:
+      - data/processed/X_train.csv
+      - data/processed/X_test.csv
+      - data/processed/y_train.csv
+      - data/processed/y_test.csv
+      - data/processed/preprocessor.joblib
+
+  train:
+    cmd: python -m src.models.train
+    deps:
+      - data/processed/X_train.csv
+      - data/processed/X_test.csv
+      - data/processed/y_train.csv
+      - data/processed/y_test.csv
+      - data/processed/preprocessor.joblib
+      - src/models/train.py
+      - src/models/evaluate.py
+    params:
+      - config/params.yaml:
+          - train.models
+          - evaluation.metric_for_selection
+    outs:
+      - models/pipeline.joblib
+    metrics:
+      - reports/metrics.json:
+          cache: false

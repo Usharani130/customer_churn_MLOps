@@ -1,0 +1,6 @@
+# Dependencies list placeholder
+mlflow
+dvc
+PyYAML
+pytest
+httpx

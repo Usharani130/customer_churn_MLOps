@@ -1,0 +1,23 @@
+# YAML config placeholder
+base:
+  project_name: "Customer-Churn-Prediction"
+  random_state: 42
+
+data_split:
+  test_size: 0.2
+  stratify: true
+
+train:
+  models:
+    LogisticRegression:
+      C: 1.0
+      max_iter: 1000
+    RandomForest:
+      n_estimators: 150
+      max_depth: 6
+      min_samples_split: 5
+    DecisionTree:
+      max_depth: 5
+
+evaluation:
+  metric_for_selection: "f1_score"

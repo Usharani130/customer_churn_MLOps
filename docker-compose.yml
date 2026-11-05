@@ -1,0 +1,33 @@
+networks:
+  churn-network:
+    driver: bridge
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: churn_backend_api
+    restart: unless-stopped
+    environment:
+      - MODEL_PATH=models/pipeline.joblib
+    # Internal to churn-network only; no external port mapping
+    expose:
+      - "8000"
+    networks:
+      - churn-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: churn_frontend_ui
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      - FASTAPI_URL=http://backend:8000
+    ports:
+      - "8501:8501"
+    networks:
+      - churn-network
